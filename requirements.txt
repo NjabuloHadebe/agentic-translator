@@ -1,0 +1,13 @@
+# requirements.txt - Compatible versions
+langchain==0.0.354
+langchain-community==0.0.20
+chromadb==0.4.22
+sentence-transformers==2.2.2
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+requests==2.31.0
+beautifulsoup4==4.12.2
+lxml==4.9.3
+python-multipart==0.0.6
+gunicorn==21.2.0

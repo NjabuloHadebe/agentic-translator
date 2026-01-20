@@ -1,26 +1,31 @@
+
 services:
   - type: web
     name: agentic-translator
     env: python
     plan: free
-    region: oregon  # Choose closest to you: oregon, frankfurt, singapore, ohio
+    # Region: keep as-is if you want Oregon; or remove this line to use your service's current region (Virginia).
+    region: virginia
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
-    startCommand: gunicorn src.api.main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120 --access-logfile -
-    healthCheckPath: /health
+    # ASGI-correct start command: Gunicorn with Uvicorn's worker
+    startCommand: gunicorn src.api.main:app --bind 0.0.0.0:$PORT --workers 1 --worker-class uvicorn.workers.UvicornWorker --timeout 120 --access-logfile -
+    # Match this with the actual route implemented by your app
+    healthCheckPath: /healthz
     autoDeploy: true
     envVars:
+      # Keep only values that reflect your actual runtime; update Python to match Render's build image
       - key: PYTHON_VERSION
-        value: 3.11.0
+        value: 3.13.4
       - key: ENVIRONMENT
         value: production
       - key: RENDER
-        value: true
+        value: "true"
       - key: GROQ_API_KEY
         sync: false
       - key: PYTHONUNBUFFERED
-        value: 1
+        value: "1"
       - key: CHROMA_PERSIST_DIRECTORY
         value: /opt/render/project/src/data/chroma_db
       - key: LOG_FILE_PATH
@@ -30,4 +35,4 @@ services:
     disk:
       name: data
       mountPath: /opt/render/project/src/data
-      sizeGB: 1  # Free plan gives 1GB disk
+      sizeGB: 1

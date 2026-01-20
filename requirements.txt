@@ -37,4 +37,3 @@ orjson>=3.9.12,<4
 
 # === Render-Specific ===
 psycopg2-binary==2.9.9
-``

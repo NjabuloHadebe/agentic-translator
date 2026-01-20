@@ -3,8 +3,31 @@ services:
     name: agentic-translator
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn src.api.main:app --bind 0.0.0.0:$PORT --workers 1
+    region: oregon  # Choose closest to you: oregon, frankfurt, singapore, ohio
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: gunicorn src.api.main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120 --access-logfile -
+    healthCheckPath: /health
+    autoDeploy: true
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: ENVIRONMENT
+        value: production
+      - key: RENDER
+        value: true
       - key: GROQ_API_KEY
         sync: false
+      - key: PYTHONUNBUFFERED
+        value: 1
+      - key: CHROMA_PERSIST_DIRECTORY
+        value: /opt/render/project/src/data/chroma_db
+      - key: LOG_FILE_PATH
+        value: /opt/render/project/src/data/translation_logs.jsonl
+      - key: DICTIONARY_DB_PATH
+        value: /opt/render/project/src/data/dictionary_db
+    disk:
+      name: data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1  # Free plan gives 1GB disk

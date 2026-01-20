@@ -2,19 +2,31 @@
 import os
 import sys
 import time
+from pathlib import Path
 from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uuid
 from datetime import datetime
+
 from typing import Optional, List, Dict, Any
-
-# Add parent directory to path to import core modules
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-
 from core.agent import create_translator
 from core.logger import TranslationLogger
 from core.memory import TranslationMemory
+
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+# Configure for Render
+ON_RENDER = os.getenv('RENDER', '').lower() == 'true'
+if ON_RENDER:
+    print("🌐 Running on Render.com")
+    # Use Render's persistent disk
+    base_path = Path("/opt/render/project/src")
+    os.environ['CHROMA_PERSIST_DIRECTORY'] = str(base_path / "data" / "chroma_db")
+    os.environ['LOG_FILE_PATH'] = str(base_path / "data" / "translation_logs.jsonl")
+    os.environ['DICTIONARY_DB_PATH'] = str(base_path / "data" / "dictionary_db")
 
 # Create instances
 logger = TranslationLogger()

@@ -1,10 +1,35 @@
-setuptools==70.0.0
+# === Core Framework ===
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 gunicorn==21.2.0
+
+# === Your Dependencies ===
 groq==0.3.0
-chromadb==0.4.22
-sentence-transformers==2.2.2
 pydantic==2.5.0
 python-dotenv==1.0.0
 httpx==0.25.1
+
+# === ChromaDB with Lightweight Embeddings ===
+chromadb==0.4.22
+sentence-transformers==2.2.2
+# Use CPU-only PyTorch for smaller size
+--find-links https://download.pytorch.org/whl/cpu
+torch==2.1.0
+torchvision==0.16.0
+torchaudio==2.1.0
+
+# === LangChain ===
+langchain==0.0.350
+
+# === Essential Dependencies ===
+numpy==1.24.3
+pandas==2.1.3
+scipy==1.11.4
+tiktoken==0.5.1
+watchfiles==0.21.0
+aiofiles==23.2.1
+python-multipart==0.0.6
+orjson==3.9.10
+
+# === Render-Specific ===
+psycopg2-binary==2.9.9  # Lightweight PostgreSQL adapter

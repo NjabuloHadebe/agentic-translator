@@ -35,5 +35,5 @@ python-multipart==0.0.6
 # ChromaDB 0.4.24 requires orjson >= 3.9.12; keep <4 to avoid future breaking major.
 orjson>=3.9.12,<4
 
-# === Render-Specific ===
-psycopg2-binary==2.9.9
+ # === Render-Specific ===
+ psycopg2-binary==2.9.9
